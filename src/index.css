@@ -21,3 +21,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+*::-webkit-scrollbar {
+  height: 7px; /* 스크롤바의 너비 */
+}
+
+*::-webkit-scrollbar-thumb {
+  height: 10%; /* 스크롤바의 길이 */
+  background: #464646; /* 스크롤바의 색상 */
+
+  border-radius: 10px;
+}
+*::-webkit-scrollbar-track {
+  background: #1e1e1e; /*스크롤바 뒷 배경 색상*/
+}
