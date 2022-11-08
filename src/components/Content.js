@@ -1,9 +1,11 @@
 import { useContext } from "react";
+import styled from "styled-components";
 import Appcontext from "../context/Appcontext";
 import Accordion from "./Accordion";
 
 function Content({ type, title, children, path }) {
-  const { setSelectedPost, openPost, setOpenPost } = useContext(Appcontext);
+  const { selectedPost, setSelectedPost, openPost, setOpenPost } =
+    useContext(Appcontext);
   function selectedFunction() {
     setSelectedPost(path);
     if (!openPost.includes(path)) {
@@ -17,7 +19,23 @@ function Content({ type, title, children, path }) {
       ))}
     </Accordion>
   ) : (
-    <div onClick={selectedFunction}>&nbsp;&nbsp;&nbsp;&nbsp;📝{title}</div>
+    <Poatwrap
+      onClick={selectedFunction}
+      className={selectedPost === path ? "selected" : ""}
+    >
+      &nbsp;&nbsp;&nbsp;&nbsp;📝{title}
+    </Poatwrap>
   );
 }
 export default Content;
+
+const Poatwrap = styled.div`
+  padding: 5px 0;
+  cursor: pointer;
+  &:not(.selected):hover {
+    background-color: ${({ theme }) => theme.color.hover};
+  }
+  &.selected {
+    background-color: ${({ theme }) => theme.color.selected};
+  }
+`;

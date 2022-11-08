@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { VscChevronDown, VscChevronRight } from "react-icons/vsc";
 
-function Accordion({ title, children, isBold }) {
-  const [expanded, setExpanded] = useState(false);
+function Accordion({ title, children, isBold, initialExpanded }) {
+  const [expanded, setExpanded] = useState(initialExpanded || false);
   return (
     <>
       <AccordionWarp
@@ -24,7 +24,6 @@ function Accordion({ title, children, isBold }) {
 export default Accordion;
 
 const AccordionWarp = styled.div`
-  color: white;
   align-items: center;
   display: flex;
   font-size: 0.8rem;

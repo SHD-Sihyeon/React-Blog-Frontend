@@ -1,3 +1,6 @@
+import { createGlobalStyle } from "styled-components";
+
+export const GlobalStyle = createGlobalStyle`
 * {
   margin: 0;
   padding: 0;
@@ -5,7 +8,7 @@
 }
 
 *:not(svg, path) {
-  color: white;
+  color: ${({ theme }) => theme.color.text};
 }
 
 body {
@@ -28,10 +31,11 @@ code {
 
 *::-webkit-scrollbar-thumb {
   height: 10%; /* 스크롤바의 길이 */
-  background: #464646; /* 스크롤바의 색상 */
+  background: ${({ theme }) => theme.color.secondary}; /* 스크롤바의 색상 */
 
   border-radius: 10px;
 }
 *::-webkit-scrollbar-track {
-  background: #1e1e1e; /*스크롤바 뒷 배경 색상*/
+  background: ${({ theme }) => theme.color.primary}; /*스크롤바 뒷 배경 색상*/
 }
+`;
