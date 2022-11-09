@@ -10,8 +10,15 @@ import PostWrap from "../components/PostWrap.js";
 
 function Main() {
   const [selected, setSelected] = useState(null);
-  const { setOpenPost, setSelectedPost, selectedPost, postData, openPost } =
-    useContext(Appcontext);
+  const {
+    setOpenPost,
+    setSelectedPost,
+    selectedPost,
+    postData,
+    openPost,
+    theme,
+    setTheme,
+  } = useContext(Appcontext);
   const listArr = [
     {
       icon: <HiOutlineDocument size={32} />,
@@ -47,15 +54,25 @@ function Main() {
   return (
     <Warp>
       <LeftBar>
-        {listArr.map((one, index) => (
-          <IconWarp
-            selected={selected === index}
-            onClick={() => setSelected(selected === index ? null : index)}
-            key={index}
-          >
-            {one.icon}
-          </IconWarp>
-        ))}
+        <div>
+          {listArr.map((one, index) => (
+            <IconWarp
+              selected={selected === index}
+              onClick={() => setSelected(selected === index ? null : index)}
+              key={index}
+            >
+              {one.icon}
+            </IconWarp>
+          ))}
+        </div>
+        <div>
+          <div
+            className={theme}
+            onClick={() => {
+              setTheme(theme === "dark" ? "light" : "dark");
+            }}
+          ></div>
+        </div>
       </LeftBar>
       {selected !== null && listArr[selected] && (
         <LeftContent>
@@ -94,7 +111,28 @@ function Main() {
             );
           })}
         </RightHeader>
-        <RightContent>{selectedPost}</RightContent>
+        <RightContent selected={selected}>
+          {(() => {
+            const data = getPostOne(postData, selectedPost);
+            return (
+              data && (
+                <>
+                  <p>{data?.path}</p>
+                  <div>
+                    <h1>{data?.title}</h1>
+                    <p>Sihyeon | {data?.data?.date}</p>
+                    <div>
+                      {data?.data?.tag.map((one, index) => (
+                        <span key={index}>{one}</span>
+                      ))}
+                    </div>
+                    <div>{data?.data?.content}</div>
+                  </div>
+                </>
+              )
+            );
+          })()}
+        </RightContent>
       </RightWrap>
     </Warp>
   );
@@ -111,6 +149,37 @@ const LeftBar = styled.div`
   width: 50px;
   min-width: 50px;
   background-color: ${({ theme }) => theme.color.third};
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  > div:last-child {
+    padding-bottom: 30px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    > div {
+      height: 42px;
+      width: 24px;
+      //border: 1px solid ${({ theme }) => theme.color.text};
+      background: ${({ theme }) => theme.color.primary};
+      border-radius: 50px;
+      position: relative;
+      &::after {
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 20px;
+        height: 20px;
+        border-radius: 20px;
+        background-color: ${({ theme }) => theme.color.text};
+        transition: 0.3s;
+      }
+      &.light::after {
+        top: 20px;
+      }
+    }
+  }
 `;
 const IconWarp = styled.div`
   display: flex;
@@ -142,6 +211,34 @@ const RightContent = styled.div`
   width: 100%;
   height: calc(100% - 50px);
   background-color: ${({ theme }) => theme.color.primary};
+  padding: 10px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  > p {
+    width: 100%;
+    color: #a7a7a7;
+  }
+  > div {
+    width: 100%;
+    max-width: 600px;
+    > h1 {
+      padding: 20px 0 20px;
+    }
+    > p {
+      padding-bottom: 10px;
+      color: #a7a7a7;
+    }
+    > div:nth-child(3) {
+      padding: 10px 0 20px 0;
+      > span {
+        padding: 5px 10px;
+        margin-right: 10px;
+        border-radius: 10px;
+        background-color: ${({ theme }) => theme.color.third};
+      }
+    }
+  }
 `;
 const RightHeader = styled.div`
   width: 100%;
