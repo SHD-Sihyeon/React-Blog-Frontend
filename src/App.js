@@ -26,6 +26,7 @@ function App() {
   const [postData, setPostData] = useState([]);
   const [openPost, setOpenPost] = useState([]);
   const [theme, setTheme] = useState("dark");
+  const [selectedTag, setSelectedTag] = useState(null);
 
   useEffect(() => {
     async function fatch() {
@@ -48,6 +49,8 @@ function App() {
         setOpenPost,
         theme,
         setTheme,
+        selectedTag,
+        setSelectedTag,
       }}
     >
       <ThemeProvider theme={theme === "dark" ? darkTheme : lightTheme}>

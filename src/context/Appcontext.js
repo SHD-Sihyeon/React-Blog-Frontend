@@ -11,4 +11,6 @@ export default React.createContext({
   postData: [],
   theme: "",
   setTheme: () => {},
+  selectedTag: null,
+  setSelectedTag: () => {},
 });

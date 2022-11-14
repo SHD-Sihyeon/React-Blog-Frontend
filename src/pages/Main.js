@@ -23,6 +23,7 @@ function Main() {
     openPost,
     theme,
     setTheme,
+    selectedTag,
   } = useContext(Appcontext);
   const listArr = [
     {
@@ -57,6 +58,7 @@ function Main() {
       contents: <Search />,
     },
   ];
+  const data = getPostOne(postData, selectedPost);
   return (
     <Warp>
       <LeftBar>
@@ -87,44 +89,45 @@ function Main() {
         </LeftContent>
       )}
       <RightWrap selected={selected}>
-        <RightHeader visible={openPost.length !== 0 ? true : false}>
-          {openPost.map((one, index) => {
-            const data = getPostOne(postData, one);
-            return (
-              <div
-                className={selectedPost === one ? "selected" : ""}
-                onClick={() => {
-                  setSelectedPost(data.path);
-                }}
-                key={index}
-              >
-                📝{data.title}
-                <span
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    const openPostFilter = openPost.filter(
-                      (one) => one !== data.path
-                    );
-                    setOpenPost(openPostFilter);
-                    setSelectedPost(
-                      openPostFilter.length !== 0 ? openPostFilter[0] : null
-                    );
-                  }}
-                >
-                  ×
-                </span>
-              </div>
-            );
-          })}
-        </RightHeader>
-        <RightContent
-          selected={selected}
-          visible={openPost.length !== 0 ? true : false}
-        >
-          {(() => {
-            const data = getPostOne(postData, selectedPost);
-            return (
-              data && (
+        {selectedTag ? (
+          <RightTagContent>{JSON.stringify(selectedTag)}</RightTagContent>
+        ) : (
+          <>
+            <RightHeader visible={openPost.length !== 0 ? true : false}>
+              {openPost.map((one, index) => {
+                const data = getPostOne(postData, one);
+                return (
+                  <div
+                    className={selectedPost === one ? "selected" : ""}
+                    onClick={() => {
+                      setSelectedPost(data.path);
+                    }}
+                    key={index}
+                  >
+                    📝{data.title}
+                    <span
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const openPostFilter = openPost.filter(
+                          (one) => one !== data.path
+                        );
+                        setOpenPost(openPostFilter);
+                        setSelectedPost(
+                          openPostFilter.length !== 0 ? openPostFilter[0] : null
+                        );
+                      }}
+                    >
+                      ×
+                    </span>
+                  </div>
+                );
+              })}
+            </RightHeader>
+            <RightContent
+              selected={selected}
+              visible={openPost.length !== 0 ? true : false}
+            >
+              {data && (
                 <>
                   <p>{data?.path}</p>
                   <div>
@@ -169,10 +172,10 @@ function Main() {
                     </div>
                   </div>
                 </>
-              )
-            );
-          })()}
-        </RightContent>
+              )}
+            </RightContent>
+          </>
+        )}
       </RightWrap>
     </Warp>
   );
@@ -286,6 +289,16 @@ const RightContent = styled.div`
       }
     }
   }
+`;
+const RightTagContent = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: ${({ theme }) => theme.color.primary};
+  padding: 10px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: scroll;
 `;
 const RightHeader = styled.div`
   width: 100%;

@@ -4,7 +4,7 @@ import Accordion from "../components/Accordion";
 import AppContext from "../context/Appcontext";
 
 function Search() {
-  const { postData } = useContext(AppContext);
+  const { postData, setSelectedTag } = useContext(AppContext);
   const [tagData, setTagData] = useState([
     {
       tagTitle: "Tech",
@@ -29,34 +29,41 @@ function Search() {
   ]);
   useEffect(() => {
     const tempArr = [];
-    searcTagFnc(postData);
-    function searcTagFnc(nowPostData) {
+    searchTagFnc(postData);
+    function searchTagFnc(nowPostData) {
       nowPostData.map((nowPostData) => {
         if (nowPostData.type === "post") {
           nowPostData.data.tag?.map((tag) => {
             const tempTarget = tempArr.find((temp) => tag === temp.tagTitle);
             if (tempTarget) {
               tempTarget.count += 1;
+              tempTarget.postArr.push(nowPostData.path);
+              tempTarget.postArr = [...new Set(tempTarget.postArr)];
             } else {
               tempArr.push({
                 tagTitle: tag,
-                count: 3,
-                postArr: [],
+                count: 1,
+                postArr: [nowPostData.path],
               });
             }
           });
         } else {
-          nowPostData.chilren && searcTagFnc(nowPostData.chilren);
+          nowPostData.children && searchTagFnc(nowPostData.children);
         }
       });
     }
     setTagData(tempArr);
-  }, []);
+  }, [postData]);
   return (
     <Accordion title="Tags" initialExpanded isBold>
       <TagWrap>
         {tagData.map((one, index) => (
-          <Tag key={index}>
+          <Tag
+            key={index}
+            onClick={() => {
+              setSelectedTag({ tagTitle: one.tagTitle, path: [] });
+            }}
+          >
             {one.tagTitle} <span>{one.count}</span>
           </Tag>
         ))}
