@@ -61,7 +61,7 @@ function Search() {
           <Tag
             key={index}
             onClick={() => {
-              setSelectedTag({ tagTitle: one.tagTitle, path: [] });
+              setSelectedTag({ tagTitle: one.tagTitle, path: one.postArr });
             }}
           >
             {one.tagTitle} <span>{one.count}</span>
